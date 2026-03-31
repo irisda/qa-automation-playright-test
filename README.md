@@ -59,6 +59,20 @@ API_BASE_URL=https://jsonplaceholder.typicode.com
 | `npm run test:headed` | Run all tests in headed (visible browser) mode |
 | `npm run report` | Open the last HTML report |
 
+### Running a Specific Test with `--grep`
+
+Use `--grep` to target a single test or describe block by name, and `--debug` to open Playwright Inspector for step-by-step debugging:
+
+```bash
+npx playwright test src/tests/practiceForm.spec.ts --grep "Task 5 — Practice Form" --debug
+```
+
+| Part | Purpose |
+|---|---|
+| `src/tests/practiceForm.spec.ts` | Scope to a single spec file |
+| `--grep "Task 5 — Practice Form"` | Match tests by name (supports regex) |
+| `--debug` | Opens Playwright Inspector — step through actions, inspect locators |
+
 ---
 
 ## Project Structure
