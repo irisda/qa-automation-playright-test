@@ -31,7 +31,7 @@ export class TextBoxPage extends BasePage {
         this.fullNameInput = page.getByPlaceholder('Full Name');
         this.emailInput = page.getByPlaceholder('name@example.com');
         this.currentAddressInput = page.getByPlaceholder('Current Address');
-        this.permanentAddressInput = page.getByPlaceholder('Permanent Address');
+        this.permanentAddressInput = page.locator('textarea#permanentAddress');
         this.submitButton = page.getByRole('button', { name: 'Submit' });
 
         this.outputSection = page.locator('#output');
