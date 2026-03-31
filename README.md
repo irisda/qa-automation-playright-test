@@ -22,7 +22,14 @@ Playwright + TypeScript test suite covering UI and API automation for the QA int
 
 ## Setup
 
-**1. Install dependencies**
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/irisda/qa-automation-playright-test.git
+cd qa-automation-playright-test
+```
+
+**2. Install dependencies**
 
 ```bash
 npm install
