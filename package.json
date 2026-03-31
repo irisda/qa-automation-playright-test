@@ -4,14 +4,17 @@
   "description": "Playwright UI + API automation — interview assessment",
   "scripts": {
     "test": "npx playwright test",
-    "test:ui": "npx playwright test src/tests/ui.spec.ts",
+    "test:ui": "npx playwright test src/tests/textBox.spec.ts src/tests/practiceForm.spec.ts",
     "test:api": "npx playwright test src/tests/api.spec.ts",
     "test:headed": "npx playwright test --headed",
     "report": "npx playwright show-report",
     "install:browsers": "npx playwright install chromium"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.4.0",
     "@playwright/test": "^1.44.0",
+    "@types/node": "^25.5.0",
+    "dotenv": "^17.3.1",
     "typescript": "^5.4.5"
   }
 }

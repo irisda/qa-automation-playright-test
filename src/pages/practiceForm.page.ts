@@ -3,28 +3,28 @@ import { BasePage } from './base.page';
 import { Gender, Hobby, PracticeFormData } from '../types/practiceForm.types';
 
 export class PracticeFormPage extends BasePage {
-    private static readonly URL = 'https://demoqa.com/automation-practice-form';
+    private static readonly URL = `${process.env.UI_BASE_URL}/automation-practice-form`;
 
     private static readonly GENDER_MAP: Record<Gender, number> = {
-        Male: 1,
-        Female: 2,
-        Other: 3,
+        [Gender.Male]: 1,
+        [Gender.Female]: 2,
+        [Gender.Other]: 3,
     };
 
     private static readonly HOBBY_MAP: Record<Hobby, number> = {
-        Sports: 1,
-        Reading: 2,
-        Music: 3,
+        [Hobby.Sports]: 1,
+        [Hobby.Reading]: 2,
+        [Hobby.Music]: 3,
     };
 
     // Required fields
     readonly firstNameInput: Locator;
     readonly lastNameInput: Locator;
-    readonly mobileInput: Locator;
     readonly submitButton: Locator;
 
     // Optional fields
     readonly emailInput: Locator;
+    readonly mobileInput: Locator;
     readonly dateOfBirthInput: Locator;
     readonly subjectsInput: Locator;
     readonly currentAddressInput: Locator;
@@ -38,21 +38,21 @@ export class PracticeFormPage extends BasePage {
     constructor(page: Page) {
         super(page);
 
-        this.firstNameInput = page.locator('#firstName');
-        this.lastNameInput = page.locator('#lastName');
-        this.mobileInput = page.locator('#userNumber');
-        this.submitButton = page.locator('#submit');
+        this.firstNameInput = page.getByPlaceholder('First Name');
+        this.lastNameInput = page.getByPlaceholder('Last Name');
+        this.mobileInput = page.getByPlaceholder('Mobile Number');
+        this.submitButton = page.getByRole('button', { name: 'Submit' });
 
-        this.emailInput = page.locator('#userEmail');
-        this.dateOfBirthInput = page.locator('#dateOfBirthInput');
-        this.subjectsInput = page.locator('#subjectsInput');
-        this.currentAddressInput = page.locator('#currentAddress');
-        // React-Select — click the control div, options render in a portal
-        this.stateSelect = page.locator('#state .react-select__control');
-        this.citySelect = page.locator('#city .react-select__control');
+        this.emailInput = page.getByPlaceholder('name@example.com');
+        this.dateOfBirthInput = page.getByPlaceholder('Date of Birth');
+        this.subjectsInput = page.getByPlaceholder('Subjects');
+        this.currentAddressInput = page.getByPlaceholder('Current Address');
+        // React-Select v5 uses generated class names — target by ARIA role instead
+        this.stateSelect = page.locator('#state').getByRole('combobox');
+        this.citySelect = page.locator('#city').getByRole('combobox');
 
         this.successModal = page.locator('.modal-content');
-        this.successModalTitle = page.locator('.modal-title');
+        this.successModalTitle = page.locator('#example-modal-sizes-title-lg');
     }
 
     async goto(): Promise<void> {
@@ -61,7 +61,6 @@ export class PracticeFormPage extends BasePage {
 
     async selectGender(gender: Gender): Promise<void> {
         const index = PracticeFormPage.GENDER_MAP[gender];
-        // Actual radio inputs are hidden; click the visible label instead
         await this.page.locator(`label[for="gender-radio-${index}"]`).click();
     }
 
@@ -71,46 +70,45 @@ export class PracticeFormPage extends BasePage {
     }
 
     async addSubject(subject: string): Promise<void> {
+        await this.subjectsInput.scrollIntoViewIfNeeded();
         await this.subjectsInput.fill(subject);
-        await this.page
-            .locator('.subjects-auto-complete__option')
-            .filter({ hasText: subject })
-            .first()
-            .click();
+    }
+
+    private getOption(name: string): Locator {
+        return this.page.getByRole('option', { name, exact: true });
     }
 
     async selectState(stateName: string): Promise<void> {
+        await this.stateSelect.scrollIntoViewIfNeeded();
         await this.stateSelect.click();
-        await this.page
-            .locator('.react-select__menu-list .react-select__option')
-            .filter({ hasText: stateName })
-            .click();
+        await this.getOption(stateName).click();
     }
 
     async selectCity(cityName: string): Promise<void> {
+        await this.citySelect.scrollIntoViewIfNeeded();
         await this.citySelect.click();
-        await this.page
-            .locator('.react-select__menu-list .react-select__option')
-            .filter({ hasText: cityName })
-            .click();
+        await this.getOption(cityName).click();
     }
 
-    async fillForm(data: PracticeFormData): Promise<void> {
+    async fillPracticeForm(data: PracticeFormData): Promise<void> {
         await this.firstNameInput.fill(data.firstName);
         await this.lastNameInput.fill(data.lastName);
+        await this.selectGender(data.gender);
 
         if (data.email) {
             await this.emailInput.fill(data.email);
         }
 
-        await this.selectGender(data.gender);
-        await this.mobileInput.fill(data.mobile);
+        if (data.mobile) {
+            await this.mobileInput.fill(data.mobile);
+        }
 
         if (data.dateOfBirth) {
             // fill() sets the raw value; Escape closes the date-picker popup
             await this.dateOfBirthInput.fill(data.dateOfBirth);
             await this.page.keyboard.press('Escape');
         }
+    
 
         if (data.subjects) {
             for (const subject of data.subjects) {

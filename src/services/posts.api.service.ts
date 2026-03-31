@@ -2,7 +2,7 @@ import { APIRequestContext, APIResponse } from '@playwright/test';
 import { Post } from '../types/post.types';
 
 export class PostsApiService {
-    private static readonly BASE_URL = 'https://jsonplaceholder.typicode.com';
+    private static readonly BASE_URL = process.env.API_BASE_URL as string;
 
     constructor(private readonly request: APIRequestContext) {}
 

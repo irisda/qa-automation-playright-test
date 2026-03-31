@@ -9,7 +9,7 @@ import { TextBoxFormData } from '../types/textBox.types';
  * under the #output container.
  */
 export class TextBoxPage extends BasePage {
-    private static readonly URL = 'https://demoqa.com/text-box';
+    private static readonly URL = `${process.env.UI_BASE_URL}/text-box`;
 
     // Form inputs
     readonly fullNameInput: Locator;
@@ -28,11 +28,11 @@ export class TextBoxPage extends BasePage {
     constructor(page: Page) {
         super(page);
 
-        this.fullNameInput = page.locator('#userName');
-        this.emailInput = page.locator('#userEmail');
-        this.currentAddressInput = page.locator('textarea#currentAddress');
-        this.permanentAddressInput = page.locator('textarea#permanentAddress');
-        this.submitButton = page.locator('#submit');
+        this.fullNameInput = page.getByPlaceholder('Full Name');
+        this.emailInput = page.getByPlaceholder('name@example.com');
+        this.currentAddressInput = page.getByPlaceholder('Current Address');
+        this.permanentAddressInput = page.getByPlaceholder('Permanent Address');
+        this.submitButton = page.getByRole('button', { name: 'Submit' });
 
         this.outputSection = page.locator('#output');
         this.outputName = this.outputSection.locator('#name');
@@ -46,9 +46,13 @@ export class TextBoxPage extends BasePage {
     }
 
     async fillForm(data: TextBoxFormData): Promise<void> {
+        await this.fullNameInput.scrollIntoViewIfNeeded();
         await this.fullNameInput.fill(data.fullName);
+        await this.emailInput.scrollIntoViewIfNeeded();
         await this.emailInput.fill(data.email);
+        await this.currentAddressInput.scrollIntoViewIfNeeded();
         await this.currentAddressInput.fill(data.currentAddress);
+        await this.permanentAddressInput.scrollIntoViewIfNeeded();
         await this.permanentAddressInput.fill(data.permanentAddress);
     }
 

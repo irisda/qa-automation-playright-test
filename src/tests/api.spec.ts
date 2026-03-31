@@ -3,10 +3,8 @@ import { Post } from '../types/post.types';
 
 test.describe('Task 6 — GET /posts', () => {
     test('Returns 200 with a valid array of Post objects', async ({ postsApi }) => {
-        // Hard assertion — if status isn't 200, there's no point continuing
-        const response = await test.step('Send GET request to /posts', async () => {
-            return postsApi.getPosts();
-        });
+       
+        const response = await postsApi.getPosts();
 
         await test.step('Validate HTTP status is 200', async () => {
             expect(response.status(), 'Response status code should be 200').toBe(200);
@@ -14,7 +12,6 @@ test.describe('Task 6 — GET /posts', () => {
 
         const posts: Post[] = await test.step('Parse and validate response is an array', async () => {
             const body = await response.json();
-            // Hard assertion — if body isn't an array the schema checks below would throw
             expect(Array.isArray(body), 'Response body should be a JSON array').toBe(true);
             return body;
         });

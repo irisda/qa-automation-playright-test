@@ -6,4 +6,14 @@ export abstract class BasePage {
     protected async navigate(url: string): Promise<void> {
         await this.page.goto(url, { waitUntil: 'domcontentloaded' });
     }
+
+    public async clearAllCookies(): Promise<void> {
+        await this.page.context().clearCookies();
+    }
+
+    public async clearLocalStorage(): Promise<void> {
+        await this.page.evaluate(() => {
+            localStorage.clear();
+        });
+    }
 }

@@ -1,17 +1,32 @@
-export type Gender = 'Male' | 'Female' | 'Other';
+export enum Gender {
+    Male = 'Male',
+    Female = 'Female',
+    Other = 'Other',
+}
 
-export type Hobby = 'Sports' | 'Reading' | 'Music';
+export enum Hobby {
+    Sports = 'Sports',
+    Reading = 'Reading',
+    Music = 'Music',
+}
+
+export enum State {
+    NCR = 'NCR',
+    UttarPradesh = 'Uttar Pradesh',
+    Haryana = 'Haryana',
+    Rajasthan = 'Rajasthan',
+}
 
 export type PracticeFormData = {
     firstName: string;
     lastName: string;
     gender: Gender;
-    mobile: string;
+    mobile?: string;
     email?: string;
     dateOfBirth?: string; // MM/DD/YYYY
     subjects?: string[];
     hobbies?: Hobby[];
     currentAddress?: string;
-    state?: string;
+    state?: State;
     city?: string;
 };

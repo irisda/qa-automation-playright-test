@@ -9,7 +9,8 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "outDir": "dist",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "types": ["node"]
   },
   "include": ["src/**/*", "playwright.config.ts"],
   "exclude": ["node_modules", "dist"]
